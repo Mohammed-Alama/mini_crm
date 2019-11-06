@@ -1,1 +1,24 @@
-//
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+// Variables
+@import 'variables';
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.logo {
+    figure {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 6em;
+        left: 46em;
+        padding: 0;
+        margin: 0;
+        background: #fd0;
+        border-radius: 1em;
+    }
+    &:hover figure {
+        display: block;
+    }
+
+}

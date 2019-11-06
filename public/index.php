@@ -5,6 +5,7 @@
  *
  * @package  Laravel
  * @author   Taylor Otwell <taylor@laravel.com>
+ * @var $kernel Illuminate\Contracts\Http\Kernel
  */
 
 define('LARAVEL_START', microtime(true));
