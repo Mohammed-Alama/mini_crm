@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static create(array $array)
+ * @method public employee()
  * @property mixed id
  * @property mixed name
  * @property mixed website
@@ -23,6 +24,6 @@ class Company extends Model
      */
     public function employee()
     {
-        return $this->hasMany(Employee::class);
+        return $this->hasMany(Employee::class,'company_id');
     }
 }

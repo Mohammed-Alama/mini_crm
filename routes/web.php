@@ -29,3 +29,7 @@ Route::delete('employees/{company}/{employee}','EmployeeController@destroy')->na
 Route::put('employees/{company}/{employee}','EmployeeController@update')->name('employees.update');
 Route::get('employees/{company}/{employee}','EmployeeController@show')->name('employees.show');
 Route::get('employees/{company}/{employee}/edit','EmployeeController@edit')->name('employees.edit');
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

@@ -9,7 +9,11 @@ use Illuminate\Http\File;
 use Faker\Generator as Faker;
 
 
-$factory->define(Company::class, function (Faker $faker) {
+$factory->define(/**
+ * @param \Faker\Generator $faker
+ *
+ * @return array
+ */ Company::class, function (Faker $faker) {
     $image = $faker->image();
     $imageFile = new File($image);
 
@@ -17,7 +21,7 @@ $factory->define(Company::class, function (Faker $faker) {
 
         'name'=>$faker->company,
         'email'=>$faker->companyEmail,
-        'logo'=>Storage::putFile('logos',$imageFile),
-        'website'=>$faker->name
+        'logo'=>json_encode( Storage::putFile('logos',$imageFile)),
+        'website'=>'www'.$faker->company.'.com'
     ];
 });
