@@ -26,4 +26,9 @@ class Company extends Model
     {
         return $this->hasMany(Employee::class,'company_id');
     }
+
+    public function subscripe ()
+    {
+        
+    }
 }

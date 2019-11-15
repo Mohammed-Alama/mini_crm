@@ -2,8 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class EmployeesRequest
+ * @package App\Http\Requests
+ */
 class EmployeesRequest extends FormRequest
 {
     /**
@@ -13,7 +18,7 @@ class EmployeesRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +28,13 @@ class EmployeesRequest extends FormRequest
      */
     public function rules()
     {
+
+
         return [
-            //
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'phone' => ['required', new PhoneNumber()],
         ];
     }
 }

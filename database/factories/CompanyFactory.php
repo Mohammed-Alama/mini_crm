@@ -21,7 +21,7 @@ $factory->define(/**
 
         'name'=>$faker->company,
         'email'=>$faker->companyEmail,
-        'logo'=>json_encode( Storage::putFile('logos',$imageFile)),
-        'website'=>'www'.$faker->company.'.com'
+        'logo'=>Storage::putFile('logos',$imageFile),
+        'website'=>'www.'.str_replace(" ","",strtolower($faker->company)).'.com'
     ];
 });

@@ -49498,7 +49498,8 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-  //hide session alert
+  $('#company-table').DataTable(); //hide session alert
+
   setTimeout(function () {
     $('#sessionMassage').fadeOut('fast');
   }, 3000); //ajax delete button for companies
@@ -49521,6 +49522,29 @@ $(document).ready(function () {
     }).done(function (data) {
       console.log(data.success);
       $('#company-' + company_id).fadeOut('slow').remove();
+    }).fail(function (data) {
+      console.log(data.failed);
+    });
+  }); //ajax delete button for employees
+
+  $('#destroyEmployee').on('click', function (e) {
+    e.preventDefault(); // Don't post the form, unless confirmed
+
+    var employee_id = $(this).data('id');
+    var token = $('meta[name=csrf-token]').attr("content");
+    alert('Are you sure to delete ' + employee_id);
+    $.ajax({
+      url: "/employees/" + employee_id,
+      dataType: "JSON",
+      method: 'POST',
+      data: {
+        '_token': token,
+        '_method': 'DELETE',
+        'id': employee_id
+      }
+    }).done(function (data) {
+      console.log(data.success);
+      $('#employee-' + employee_id).fadeOut('slow').remove();
     }).fail(function (data) {
       console.log(data.failed);
     });

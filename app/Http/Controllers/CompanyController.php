@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Http\Requests\CompaniesRequest;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-
 use Storage;
 
 /**
@@ -28,7 +28,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        $companies = (new Company)->paginate(2);
+        $companies = Company::all();
 
         return view('companies.plural')->with('companies', $companies);
     }
@@ -55,35 +55,24 @@ class CompanyController extends Controller
     {
 
         $request->validated();
-
-//        $this->validate($request, [
-//            'name' => 'required',
-//            'email' => 'required',
-//            'logo' => 'required|mimes:jpg,jpeg,png|max:20000',
-//            'website' => 'required',
-//        ]);
-
-        $path = '';
         if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
             $logo_name = $logo->getClientOriginalName();
-            if (! empty($request->name)) {
-                $request_name = str_replace(" ", "_", strtolower($request->name));
-                $path = Storage::putFileAs('logos', new UploadedFile($logo, $logo_name), $request_name . '_' . $logo_name);
-            }
+            $request_name = str_replace(" ", "_", strtolower(request('name')));
+            $path = Storage::putFileAs('logos', new UploadedFile($logo, $logo_name), $request_name . '_' . $logo_name);
         }
-        if (! empty($request->email)) {
-            if (! empty($request->website)) {
-                Company::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
 
 
-                    'logo' => $path,
-                    'website' => $request->website,
-                ]);
-            }
+        if (! empty($path)) {
+            Company::create([
+                'name' => request('name'),
+                'email' => request('email'),
+                'logo' => $path,
+                'website' => request('website'),
+            ]);
         }
+
+
         session()->flash('SuccessMassage', 'Company Created Successfully');
 
         return redirect()->to(route('companies.index'));
@@ -99,7 +88,9 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-        return view('companies.single')->with('company', $company);
+        $employees = DB::table('employees')->where('company_id', '=', $company->id)->get();
+
+        return view('companies.single')->with(['company' => $company, 'employees' => $employees]);
     }
 
     /**
@@ -117,22 +108,16 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param CompaniesRequest $request
      * @param Company $company
      *
      * @return Response
      * @throws
      */
-    public function update(Request $request, Company $company)
+    public function update(CompaniesRequest $request, Company $company)
     {
 
-
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required',
-            'logo' => 'mimes:jpg,jpeg,png|max:20000',
-            'website' => 'required',
-        ]);
+        $request->validated();
 
         if ($request->hasFile('logo')) {
             Storage::delete($company->logo);
@@ -172,12 +157,12 @@ class CompanyController extends Controller
         Storage::delete($company->logo);
         if ($company->delete()) {
             return response()->json([
-                'success' => 'Record deleted successfully!',
+                'success' => 'Company deleted successfully!',
             ]);
         }
 
         return response()->json([
-            'failed' => 'Record does not deleted successfully!',
+            'failed' => 'Company does not deleted successfully!',
         ]);
     }
 }

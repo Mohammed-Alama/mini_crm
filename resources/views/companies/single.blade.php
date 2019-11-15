@@ -37,24 +37,39 @@
                             </div>
                         </div>
 
+                        <div class="card">
+                            <div class="card-header">
+                                <label for="website">Employees</label>
+                                <a class="btn btn-sm btn-info" role="button" aria-disabled="true" href="{{route('employees.create',$company)}}">Add Employee</a>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach ($employees as $employee)
+                                        <tr id="employee-{{$employee->id}}">
+                                            <td>{{$employee->name}}</td>
+                                            <td>{{$employee->email}}</td>
+                                            <td>{{$employee->phone}}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-warning" role="button" aria-disabled="true" href="{{route('employees.edit',['employee'=>$employee->id,'company'=>$company->id])}}">Edit</a>
+                                                <a class="btn btn-sm btn-danger" id="destroyEmployee" role="button" aria-disabled="true" href="javascript:void(0);" data-employeeId="{{$employee->id}}" data-companyId="{{$company->id}}">Delete</a>
+                                            </td>
+                                    @endforeach
+                                    </tbody>
 
-{{--                        <table class="table table-striped">--}}
-{{--                            <thead>--}}
-{{--                            <tr>--}}
-{{--                                <th scope="col">#</th>--}}
-{{--                                <th scope="col">Full Name</th>--}}
-{{--                                <th scope="col">Email</th>--}}
-{{--                            </tr>--}}
-{{--                            </thead>--}}
-{{--                            <tbody>--}}
-{{--                            @foreach($employees as $employee)--}}
-{{--                                <tr>--}}
-{{--                                    <th scope="row">{{$employee->id}}</th>--}}
-{{--                                    <td>{{$employee->first_name . $employee->last_name}}</td>--}}
-{{--                                    <td>{{$company->email}}</td>--}}
-{{--                                </tr>--}}
-{{--                            @endforeach--}}
-{{--                        </table>--}}
+                                </table>
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
