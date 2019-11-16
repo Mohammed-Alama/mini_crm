@@ -49498,7 +49498,49 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-  $('#company-table').DataTable(); //hide session alert
+  $('#company-table').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: "companies",
+    columns: [{
+      "name": 'ID',
+      "data": 'id',
+      "title": "ID",
+      "orderable": true,
+      "searchable": true
+    }, {
+      "data": 'name',
+      "name": 'Name',
+      "title": "Name",
+      "orderable": true,
+      "searchable": true
+    }, {
+      "name": 'Email',
+      "data": 'email',
+      "title": "Email",
+      "orderable": true,
+      "searchable": true
+    }, {
+      "name": "logo",
+      "data": "logo",
+      "render": function render(data) {
+        return '<img src="' + data + '" height="50" alt="company"/>';
+      },
+      "title": "Logo",
+      "orderable": true,
+      "searchable": true
+    }, {
+      "data": 'website',
+      "name": 'Website',
+      "title": "Website",
+      "orderable": true,
+      "searchable": true
+    }, {
+      "data": 'action',
+      "name": 'Action',
+      "title": "Action"
+    }]
+  }); //hide session alert
 
   setTimeout(function () {
     $('#sessionMassage').fadeOut('fast');

@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\Http\Requests\CompaniesRequest;
 use DB;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Storage;
+use Yajra\DataTables\DataTables;
 
 /**
  * Class CompanyController
@@ -23,14 +23,37 @@ class CompanyController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
      * @return Response
+     * @throws
      */
     public function index()
     {
-        $companies = Company::all();
+        if (request()->ajax()) {
+            return DataTables::of(Company::query())
+                ->setRowClass(function ($company) {
+                    return $company->id % 2 == 0 ? 'alert-primary' : 'alert-danger';
+                })
+                ->setRowId(function ($company) {
+                    return 'company_' . $company->id;
+                })
+                ->setRowAttr(['align' => 'center'])
+                ->setRowData([
+                    'data-id' => function ($company) {
+                        return $company->id;
+                    },
+                ])
+                ->addColumn('logo', function ($company) {
+//                    return '<div class="logo"><button class="btn btn-info">Show Logo</button><figure><img src="' . asset('storage/' . $company->image) . '" alt="logo of ' . $company->name . '" class="img-rounded company-logo" /></figure></div>';
+//                    return '<img src="' . asset('storage/' . $company->image) . '" alt="logo of ' . $company->name . '" class="img-rounded company-logo" />';
+return $company->logo;
+                })->addColumn('action', function ($company) {
+                    return '<a class="btn btn-sm btn-warning" role="button" aria-disabled="true" href="' . route('companies.edit', $company->id) . '"><i class="glyphicon glyphicon-edit"></i>Edit</a>' .
+                        '<a class="btn btn-sm btn-danger" id="destroyCompany" role="button" aria-disabled="true" href="javascript:void(0);" data-id="' . $company->id . '"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+                })->rawColumns(['image', 'action'])
+                ->make(true);
+        }
 
-        return view('companies.plural')->with('companies', $companies);
+        return view('companies.plural');
     }
 
     /**
@@ -109,7 +132,7 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param CompaniesRequest $request
-     * @param Company $company
+     * @param Company          $company
      *
      * @return Response
      * @throws

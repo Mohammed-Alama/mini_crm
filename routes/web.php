@@ -11,11 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
+
+//Clear All route/config/application/view
+Route::get('/clear','ClearController@clearAll');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -28,6 +28,3 @@ Route::delete('employees/{company}/{employee}', 'EmployeeController@destroy')->n
 Route::put('employees/{company}/{employee}', 'EmployeeController@update')->name('employees.update');
 Route::get('employees/{company}/{employee}', 'EmployeeController@show')->name('employees.show');
 Route::get('employees/{company}/{employee}/edit', 'EmployeeController@edit')->name('employees.edit');
-
-Route::post('podcast/subscribe/{podcast}','PodcastSubscripeController@store');
-Route::delete('podcast/subscribe/{podcast}','PodcastUnSubscripeController@destroy');
